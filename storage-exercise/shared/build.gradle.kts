@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -34,14 +35,17 @@ kotlin {
     jvm()
 
     sourceSets {
+        commonMain {
+            dependencies {
+            }
+        }
         androidMain {
             dependencies {}
         }
-        commonMain {
-            dependencies {}
-        }
         jvmMain {
-            dependencies {}
+            dependencies {
+                implementation(libs.kotlinx.serialization.json)
+            }
         }
         wasmJsMain {
             dependencies {}

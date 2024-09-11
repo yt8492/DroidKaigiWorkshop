@@ -6,6 +6,7 @@ import kotlinx.browser.document
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
+    println("main")
     ComposeViewport(document.body!!) {
         App()
     }
