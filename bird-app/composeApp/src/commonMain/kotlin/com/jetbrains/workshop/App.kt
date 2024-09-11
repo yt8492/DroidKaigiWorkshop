@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,15 +23,25 @@ data object HomeRoute
 
 @Composable
 fun App() {
+    val coroutineScope = rememberCoroutineScope()
     BirdAppTheme {
         var birdImages by remember { mutableStateOf(emptyList<BirdImage>()) }
         LaunchedEffect(Unit) {
-            birdImages = BirdRepository().getImages()
+            birdImages = BirdRepository.INSTANCE.getImages()
         }
         BirdsPage(
             uiState = BirdsUiState(birdImages, selectedCategory = null),
-            onSelectCategory = { },
-            onSelectImage = { }
+            onSelectCategory = { category ->
+                coroutineScope.launch {
+                    birdImages = BirdRepository.INSTANCE.getImages()
+                        .filter {
+                            it.category == category
+                        }
+                }
+            },
+            onSelectImage = {
+
+            }
         )
         if(birdImages.isEmpty()) {
             Text("No birds...")
